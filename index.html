@@ -5,96 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta http-equiv="Content-Security-Policy" content="default-src * data:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
     <script src="components/loader.js"></script>
-    <script src="lib/onsenui/js/onsenui.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9BxS4zOTKnJK7AnnrTD22y5Y-K1X4_tE" async defer></script>
+    <script type="text/javascript" src="./js/jquery.js"></script>
+    <script type="text/javascript" src="./js/bootstrap.js"></script>
+    <script type="text/javascript" src="./js/hammer.js"></script>
+    <script type="text/javascript" src="./js/jquery.hammer.js"></script>
+    <script type="text/javascript" src="./js/main.js"></script>
 
     <link rel="stylesheet" href="components/loader.css">
-    <link rel="stylesheet" href="lib/onsenui/css/onsenui.css">
-    <link rel="stylesheet" href="lib/onsenui/css/onsen-css-components.css">
+    <link rel="stylesheet" href="./css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
-    <style>
-      html, body { height: 100%; margin: 0; padding: 0; }
-      #map_canvas { height: 100%; }
-    </style>
 </head>
 <body>
     <div id="map_canvas"></div>
-    <script>
-        var getLocation = function() {
-          var map = {};
 
-          // 座標情報の取得に成功したら発火する処理
-          // 引数pには座標情報が入ります
-          var success = function(p) {
-
-            // 座標情報
-            var lon = p.coords.longitude;
-            var lat = p.coords.latitude;
-    
-        　  // 位置情報オブジェクトを生成
-            var latlng = new google.maps.LatLng(lat,lon);
-            // 地図情報
-            var mapOptions = {
-                disableDefaultUI: true,
-                center: latlng, // 地図の中央に
-                zoom: 17,
-                mapTypeId: google.maps.MapTypeId.ROADMAP,
-                scaleControl:true
-            };
-            // 地図のセットアップ
-         　 map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
-            // 現在地を表示
-            var marker = new google.maps.Marker({
-                position:latlng,
-                map:map,
-                title:"現在地"}
-            );
-            map.setCenter(latlng);
-              
-          };
-          // 座標情報の取得に失敗
-          var locFail = function() {
-              // 座標の取得処理に失敗した場合
-              alert('位置情報の取得に失敗しました');
-          };
-          // 現在の座標を取得
-          navigator.geolocation.getCurrentPosition(success, locFail);
-      }
-      //  デバイスの準備ができたら
-      document.addEventListener("deviceready", getLocation, true);
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9BxS4zOTKnJK7AnnrTD22y5Y-K1X4_tE"
-        async defer></script>
-    <ons-tabbar>
-      <ons-tab label="Tab 1" page="" active>
-      </ons-tab>
-      <ons-tab label="Tab 2" page="">
-      </ons-tab>
-      <ons-tab label="Tab 3" page="tab2.html">
-      </ons-tab>
-    </ons-tabbar>
-
-    <ons-template id="tab1.html">
-      <ons-page>
-        <ons-toolbar>
-          <div class="center">Tab 1</div>
-        </ons-toolbar>
-
-        <p style="text-align: center;">
-          This is the first page.
-        </p>
-      </ons-page>
-    </ons-template>
-
-    <ons-template id="tab2.html">
-      <ons-page>
-        <ons-toolbar>
-          <div class="center">Tab 2</div>
-        </ons-toolbar>
-
-        <p style="text-align: center;">
-          This is the second page.
-        </p>
-      </ons-page>
-    </ons-template>
+    <footer id="footer">
+        <div class="nav-tabs-outer">
+            <ul class="nav nav-tabs js-tabs">
+                <li class="active text-center"><button>aaa</button></li>
+                <li class="text-center"><button>aaa</button></li>
+                <li class="text-center"><button>aaa</button></li>
+                <li class="text-center"><button>aaa</button></li>
+                <li class="text-center"><button>aaa</button></li>
+                <li class="text-center"><button>aaa</button></li>
+                <li class="text-center"><button>aaa</button></li>
+                <li class="text-center"><button>aaa</button></li>
+                <li class="text-center"><button>aaa</button></li>
+                <li class="text-center"><button>aaa</button></li>
+            </ul>
+        </div>
+    </footer>
 </body>
 </html>
