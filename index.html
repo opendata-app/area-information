@@ -6,19 +6,38 @@
     <meta http-equiv="Content-Security-Policy" content="default-src * data:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
     <script src="components/loader.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9BxS4zOTKnJK7AnnrTD22y5Y-K1X4_tE" async defer></script>
-    <script type="text/javascript" src="./js/jquery.js"></script>
-    <script type="text/javascript" src="./js/bootstrap.js"></script>
-    <script type="text/javascript" src="./js/hammer.js"></script>
-    <script type="text/javascript" src="./js/jquery.hammer.js"></script>
-    <script type="text/javascript" src="./js/main.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
+    <script type="text/javascript" src="js/hammer.js"></script>
+    <script type="text/javascript" src="js/jquery.hammer.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
 
     <link rel="stylesheet" href="components/loader.css">
-    <link rel="stylesheet" href="./css/bootstrap.css">
+    <link rel="stylesheet" href="css/bootstrap.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div id="map_canvas"></div>
+    <!-- サイドオープン時メインコンテンツを覆う -->
+    <div class="overlay" id="js__overlay"></div>
 
+    <!-- サイドメニュー -->
+    <nav class="side-menu">
+        <ul>
+          <li><a href="#">メニュータイトル</a></li>
+          <li><a href="#">メニュータイトル</a></li>
+          <li><a href="#">メニュータイトル</a></li>
+        </ul>
+    </nav>
+
+    
+    
+    <!-- メインコンテンツ -->
+    <div class="wrapper">
+    <!-- 開閉用ボタン -->
+    <div class="side-menu-btn" id="js__sideMenuBtn"></div>
+    
+    <div id="map_canvas"></div>
+    
     <footer id="footer">
         <div class="nav-tabs-outer">
             <ul class="nav nav-tabs js-tabs">
@@ -28,12 +47,9 @@
                 <li class="text-center"><button>aaa</button></li>
                 <li class="text-center"><button>aaa</button></li>
                 <li class="text-center"><button>aaa</button></li>
-                <li class="text-center"><button>aaa</button></li>
-                <li class="text-center"><button>aaa</button></li>
-                <li class="text-center"><button>aaa</button></li>
-                <li class="text-center"><button>aaa</button></li>
             </ul>
         </div>
     </footer>
+    </div>
 </body>
 </html>
