@@ -1,16 +1,31 @@
+var fname = "./js/test.txt";
+var str = getTextFile('./js/test.txt');
+var data = str.split("\n");
 var map = null;
-// google.maps.Geocoder()コンストラクタのインスタンスを生成
-var geocoder = new google.maps.Geocoder();
 var flg = true;
 var marker;
-var markerList = new google.maps.MVCArray();
 var markerData = [ // マーカーを立てる住所
-    "札幌市中央区",
+    "札幌市北１９条",
     "札幌市東区",
-    "札幌市南区",
     "札幌市西区",
     "札幌市北区"
 ];
+var currentInfoWindow = null;    //最後に開いた情報ウィンドウを記憶
+
+
+function getTextFile () {
+    var text = null;
+    var ajax = new XMLHttpRequest();
+    with (ajax) {
+        /*@if(1) onreadystatechange @else@*/ onload /*@end@*/ =
+        function () {
+            readyState == 4 && status == 200 && (text = responseText);
+        };
+        open('GET', fname, false);
+        send(null);
+    };
+    return text;
+}
 
 // マップ表示
 var getLocation = function() {
@@ -62,41 +77,35 @@ document.addEventListener("deviceready", getLocation, true);
 var dispMarker = function() {
     if (flg) {
         // 情報アイコンを表示
-        for (var i = 0; i < markerData.length; i++) {
-            // geocoder.geocode()メソッドを実行 
-            geocoder.geocode({'address': markerData[i]}, function(results, status) {
-                // ジオコーディングが成功した場合
-                if (status == google.maps.GeocoderStatus.OK) {
-                    // google.maps.Marker()コンストラクタにマーカーを設置するMapオブジェクトと
-                    // 変換した緯度・経度情報を渡してインスタンスを生成
-                    marker = new google.maps.Marker({ // マーカーの追加
-                        position: results[0].geometry.location, // マーカーを立てる位置を指定
-                        // icon:'aaa.png' // 情報ごとにマーカーイメージを変更（できると見やすそう）
-                    });
-                    marker.setMap(map);
-                    markerList.push(marker);
-    
-                } else {
-                    // ジオコーディングが成功しなかった場合
-                    console.log('Geocode was not successful for the following reason: ' + status);
-                }
-            });
-        }
+        markerList.forEach(function(marker, idx) {
+            marker.setMap(map);
+        });
         flg = false;
     } else {
         markerList.forEach(function(marker, idx) {
             marker.setMap(null);
         });
+        // infoWindow.clear();
         flg = true;
     }
 };
 
-function MarkerClear() {
-    
+// マーカーにクリックイベントを追加
+function markerEvent(marker, msg) {
+    var infoWindow = new google.maps.InfoWindow({
+        content: msg
+    });
+    google.maps.event.addListener(marker, 'click', function(event) {
+        if (currentInfoWindow) {
+            currentInfoWindow.close(); // 先に開いた情報ウィンドウがあれば、closeする
+        }
+        infoWindow.open(marker.getMap(), marker); // 情報ウィンドウを開く
+        currentInfoWindow = infoWindow;
+    });
 }
 
 // タブ
-$(function(){
+$(function () {
     var $jsTabs = $('.js-tabs');
     var $jsTabsLi = $('.js-tabs li');
 
@@ -105,4 +114,45 @@ $(function(){
 
     //tabエリアの横幅指定
     $jsTabs.css('width',tabsLiWid * tabsLiLen);
+});
+
+$(function () {
+  var $body = $('body');
+  $('#js__sideMenuBtn').on('click', function () {
+    $body.toggleClass('side-open');
+    $('#js__overlay').on('click', function () {
+      $body.removeClass('side-open');
+    });
+  });
+});
+
+$(function () {
+    // google.maps.Geocoder()コンストラクタのインスタンスを生成
+    geocoder = new google.maps.Geocoder();
+    // google.maps.MVCArray()コンストラクタのインスタンスを生成
+    markerList = new google.maps.MVCArray();
+    // 情報アイコンを表示
+    var i = 0;
+    setTimeout(
+        function a() {
+      if (!(i < data.length)) return;
+      geocoder.geocode({'address': data[i]}, function(results, status) {
+            // ジオコーディングが成功した場合
+            if (status == google.maps.GeocoderStatus.OK) {
+                // google.maps.Marker()コンストラクタにマーカーを設置するMapオブジェクトと
+                // 変換した緯度・経度情報を渡してインスタンスを生成
+                marker = new google.maps.Marker({ // マーカーの追加
+                    position: results[0].geometry.location, // マーカーを立てる位置を指定
+                    // icon:'aaa.png' // 情報ごとにマーカーイメージを変更（できると見やすそう）
+                });
+                markerEvent(marker, results[0].formatted_address); // マーカーにクリックイベントを追加
+                markerList.push(marker);
+            } else {
+                // ジオコーディングが成功しなかった場合
+                console.log('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+      i ++;
+      setTimeout(a, 1000);
+    });
 });
