@@ -17,4 +17,15 @@ var fname = "test.txt";
  var str =getTextFile('test.txt');
 var data = str.split("\n");
 
-
+function Kakikomi(data){
+    var key=new Date();
+    for(i=0;i<data.length;i++){
+        localStorage.setItem(key,data[i]);
+    }
+}
+function Yomikomi(){
+    for(i=0;i<localStorage.length;i++){
+        var key=localStorage.key(i);
+        document.write(localStorage.getItem(key));
+    }
+}
