@@ -1,24 +1,29 @@
-var fname = "./js/test.txt";
-var str = getTextFile('./js/test.txt');
-var data = str.split("\n");
+var firstFlg = "";
 var map = null;
-var flg = true;
+var wifiFlg = true;
+var taxiFlg = true;
+var toiletFlg = true;
+var parkFlg = true;
+var aedFlg = true;
 var marker;
-var markerData = [ // マーカーを立てる住所
-    "札幌市北１９条",
-    "札幌市東区",
-    "札幌市西区",
-    "札幌市北区"
-];
+var lists = [];
 var currentInfoWindow = null;    //最後に開いた情報ウィンドウを記憶
 
+// 各マーカーリストの作成
+$(function () {
+    readWifiMarker()
+    .then(readTaxiMarker)
+    .then(readParkMarker)
+    .then(readToiletMarker)
+    .then(readAEDMarker);
+});
 
-function getTextFile () {
+// ファイルの読み込み
+function getTextFile (fname) {
     var text = null;
     var ajax = new XMLHttpRequest();
     with (ajax) {
-        /*@if(1) onreadystatechange @else@*/ onload /*@end@*/ =
-        function () {
+        onload = function () {
             readyState == 4 && status == 200 && (text = responseText);
         };
         open('GET', fname, false);
@@ -54,7 +59,8 @@ var getLocation = function() {
         // 現在地を表示
         var currentPositionMarker = new google.maps.Marker({
             position: latlng,
-            title: "現在地"
+            title: "現在地",
+            icon:'./pic/location.png'
         });
         currentPositionMarker.setMap(map);
         map.setCenter(latlng);
@@ -73,20 +79,84 @@ var getLocation = function() {
 //  デバイスの準備ができたら
 document.addEventListener("deviceready", getLocation, true);
 
-// 情報表示
-var dispMarker = function() {
-    if (flg) {
+// アイコン表示
+function dispAEDMarker() {
+    if (aedFlg) {
         // 情報アイコンを表示
-        markerList.forEach(function(marker, idx) {
+        AEDMarkerList.forEach(function(marker, idx) {
             marker.setMap(map);
         });
-        flg = false;
+        aedFlg = false;
     } else {
-        markerList.forEach(function(marker, idx) {
+        AEDMarkerList.forEach(function(marker, idx) {
             marker.setMap(null);
         });
         // infoWindow.clear();
-        flg = true;
+        aedFlg = true;
+    }
+};
+
+function dispWifiMarker() {
+    if (wifiFlg) {
+        // 情報アイコンを表示
+        wifiMarkerList.forEach(function(marker, idx) {
+            marker.setMap(map);
+        });
+        wifiFlg = false;
+    } else {
+        wifiMarkerList.forEach(function(marker, idx) {
+            marker.setMap(null);
+        });
+        // infoWindow.clear();
+        wifiFlg = true;
+    }
+};
+
+function dispTaxiMarker() {
+    if (taxiFlg) {
+        // 情報アイコンを表示
+        taxiMarkerList.forEach(function(marker, idx) {
+            marker.setMap(map);
+        });
+        taxiFlg = false;
+    } else {
+        taxiMarkerList.forEach(function(marker, idx) {
+            marker.setMap(null);
+        });
+        // infoWindow.clear();
+        taxiFlg = true;
+    }
+};
+
+function dispToiletMarker() {
+    if (toiletFlg) {
+        // 情報アイコンを表示
+        toiletMarkerList.forEach(function(marker, idx) {
+            marker.setMap(map);
+        });
+        toiletFlg = false;
+    } else {
+        toiletMarkerList.forEach(function(marker, idx) {
+            marker.setMap(null);
+        });
+        // infoWindow.clear();
+        toiletFlg = true;
+    }
+};
+
+function dispParkMarker() {
+    if (parkFlg) {
+        // 情報アイコンを表示
+        parkMarkerList.forEach(function(marker, idx) {
+            marker.setMap(map);
+        });
+        parkFlg = false;
+    } else {
+        parkMarkerList.forEach(function(marker, idx) {
+            marker.setMap(null);
+        });
+        // infoWindow.clear();
+        parkFlg = true;
     }
 };
 
@@ -104,6 +174,15 @@ function markerEvent(marker, msg) {
     });
 }
 
+// タブ表示の切り替え
+function displayButton(id) {
+    if ($('#' + id).css("display") != 'none') {
+        $('#' + id).css("display", "none");
+    } else {
+        $('#' + id).css("display", "");
+    }
+}
+
 // タブ
 $(function () {
     var $jsTabs = $('.js-tabs');
@@ -116,6 +195,7 @@ $(function () {
     $jsTabs.css('width',tabsLiWid * tabsLiLen);
 });
 
+// 設定メニュー
 $(function () {
   var $body = $('body');
   $('#js__sideMenuBtn').on('click', function () {
@@ -126,17 +206,21 @@ $(function () {
   });
 });
 
-$(function () {
+// マーカーを読み込む
+function readWifiMarker() {
+    return new Promise(function (resolve, reject) {
     // google.maps.Geocoder()コンストラクタのインスタンスを生成
     geocoder = new google.maps.Geocoder();
     // google.maps.MVCArray()コンストラクタのインスタンスを生成
-    markerList = new google.maps.MVCArray();
+    wifiMarkerList = new google.maps.MVCArray();
     // 情報アイコンを表示
+    var str = getTextFile("./data/wifi.txt");
+    var data = str.split("\n");
     var i = 0;
-    setTimeout(
-        function a() {
-      if (!(i < data.length)) return;
-      geocoder.geocode({'address': data[i]}, function(results, status) {
+    setTimeout(function a() {
+        console.log(data[i]);
+        if (!(i < data.length)) return;
+        geocoder.geocode({'address': data[i]}, function(results, status) {
             // ジオコーディングが成功した場合
             if (status == google.maps.GeocoderStatus.OK) {
                 // google.maps.Marker()コンストラクタにマーカーを設置するMapオブジェクトと
@@ -146,13 +230,154 @@ $(function () {
                     // icon:'aaa.png' // 情報ごとにマーカーイメージを変更（できると見やすそう）
                 });
                 markerEvent(marker, results[0].formatted_address); // マーカーにクリックイベントを追加
-                markerList.push(marker);
+                wifiMarkerList.push(marker);
             } else {
                 // ジオコーディングが成功しなかった場合
                 console.log('Geocode was not successful for the following reason: ' + status);
             }
         });
-      i ++;
-      setTimeout(a, 1000);
+    i ++;
+    setTimeout(a, 2000);
+    });
+    });
+}
+
+function readTaxiMarker() {
+    return new Promise(function (resolve, reject) {
+    // google.maps.Geocoder()コンストラクタのインスタンスを生成
+    geocoder = new google.maps.Geocoder();
+    // google.maps.MVCArray()コンストラクタのインスタンスを生成
+    taxiMarkerList = new google.maps.MVCArray();
+    // 情報アイコンを表示
+    var str = getTextFile("./data/taxi.txt");
+    var data = str.split("\n");
+    var i = 0;
+    setTimeout(function a() {
+        console.log(data[i]);
+        if (!(i < data.length)) return;
+        geocoder.geocode({'address': data[i]}, function(results, status) {
+            // ジオコーディングが成功した場合
+            if (status == google.maps.GeocoderStatus.OK) {
+                // google.maps.Marker()コンストラクタにマーカーを設置するMapオブジェクトと
+                // 変換した緯度・経度情報を渡してインスタンスを生成
+                marker = new google.maps.Marker({ // マーカーの追加
+                    position: results[0].geometry.location, // マーカーを立てる位置を指定
+                    // icon:'aaa.png' // 情報ごとにマーカーイメージを変更（できると見やすそう）
+                });
+                markerEvent(marker, results[0].formatted_address); // マーカーにクリックイベントを追加
+                taxiMarkerList.push(marker);
+            } else {
+                // ジオコーディングが成功しなかった場合
+                console.log('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    i ++;
+    setTimeout(a, 2000);
+    });
+    });
+}
+
+function readParkMarker() {
+    return new Promise(function (resolve, reject) {
+    // google.maps.Geocoder()コンストラクタのインスタンスを生成
+    geocoder = new google.maps.Geocoder();
+    // google.maps.MVCArray()コンストラクタのインスタンスを生成
+    parkMarkerList = new google.maps.MVCArray();
+    // 情報アイコンを表示
+    var str = getTextFile("./data/park.txt");
+    var data = str.split("\n");
+    var i = 0;
+    setTimeout(function a() {
+        console.log(data[i]);
+        if (!(i < data.length)) return;
+        geocoder.geocode({'address': data[i]}, function(results, status) {
+            // ジオコーディングが成功した場合
+            if (status == google.maps.GeocoderStatus.OK) {
+                // google.maps.Marker()コンストラクタにマーカーを設置するMapオブジェクトと
+                // 変換した緯度・経度情報を渡してインスタンスを生成
+                marker = new google.maps.Marker({ // マーカーの追加
+                    position: results[0].geometry.location, // マーカーを立てる位置を指定
+                    // icon:'aaa.png' // 情報ごとにマーカーイメージを変更（できると見やすそう）
+                });
+                markerEvent(marker, results[0].formatted_address); // マーカーにクリックイベントを追加
+                parkMarkerList.push(marker);
+            } else {
+                // ジオコーディングが成功しなかった場合
+                console.log('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    i ++;
+    setTimeout(a, 2000);
     });
 });
+}
+
+function readToiletMarker() {
+    return new Promise(function (resolve, reject) {
+    // google.maps.Geocoder()コンストラクタのインスタンスを生成
+    geocoder = new google.maps.Geocoder();
+    // google.maps.MVCArray()コンストラクタのインスタンスを生成
+    toiletMarkerList = new google.maps.MVCArray();
+    // 情報アイコンを表示
+    var str = getTextFile("./data/toilet.txt");
+    var data = str.split("\n");
+    var i = 0;
+    setTimeout(function a() {
+        console.log(data[i]);
+        if (!(i < data.length)) return;
+        geocoder.geocode({'address': data[i]}, function(results, status) {
+            // ジオコーディングが成功した場合
+            if (status == google.maps.GeocoderStatus.OK) {
+                // google.maps.Marker()コンストラクタにマーカーを設置するMapオブジェクトと
+                // 変換した緯度・経度情報を渡してインスタンスを生成
+                marker = new google.maps.Marker({ // マーカーの追加
+                    position: results[0].geometry.location, // マーカーを立てる位置を指定
+                    // icon:'aaa.png' // 情報ごとにマーカーイメージを変更（できると見やすそう）
+                });
+                markerEvent(marker, results[0].formatted_address); // マーカーにクリックイベントを追加
+                toiletMarkerList.push(marker);
+            } else {
+                // ジオコーディングが成功しなかった場合
+                console.log('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    i ++;
+    setTimeout(a, 2000);
+    });
+    });
+}
+
+function readAEDMarker() {
+    return new Promise(function (resolve, reject) {
+    // google.maps.Geocoder()コンストラクタのインスタンスを生成
+    geocoder = new google.maps.Geocoder();
+    // google.maps.MVCArray()コンストラクタのインスタンスを生成
+    AEDMarkerList = new google.maps.MVCArray();
+    // 情報アイコンを表示
+    var str = getTextFile("./data/AED.txt");
+    var data = str.split("\n");
+    var i = 0;
+    setTimeout(function a() {
+        console.log(data[i]);
+        if (!(i < data.length)) return;
+        geocoder.geocode({'address': data[i]}, function(results, status) {
+            // ジオコーディングが成功した場合
+            if (status == google.maps.GeocoderStatus.OK) {
+                // google.maps.Marker()コンストラクタにマーカーを設置するMapオブジェクトと
+                // 変換した緯度・経度情報を渡してインスタンスを生成
+                marker = new google.maps.Marker({ // マーカーの追加
+                    position: results[0].geometry.location, // マーカーを立てる位置を指定
+                    // icon:'aaa.png' // 情報ごとにマーカーイメージを変更（できると見やすそう）
+                });
+                markerEvent(marker, results[0].formatted_address); // マーカーにクリックイベントを追加
+                AEDMarkerList.push(marker);
+            } else {
+                // ジオコーディングが成功しなかった場合
+                console.log('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    i ++;
+    setTimeout(a, 2000);
+    });
+    });
+}

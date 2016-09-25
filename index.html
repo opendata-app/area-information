@@ -22,31 +22,36 @@
 
     <!-- サイドメニュー -->
     <nav class="side-menu">
-        <ul>
-          <li><a href="#">メニュータイトル</a></li>
-          <li><a href="#">メニュータイトル</a></li>
-          <li><a href="#">メニュータイトル</a></li>
+        <ul class="nav">
+          <li><a href="#">タブON・OFF</a></li>
+            <ul class="nav">
+                <li><a href="#" onclick="displayButton('toilet');return false;">公園トイレ表示・非表示</a></li>
+                <li><a href="#" onclick="displayButton('wifi');return false;">Wi-Fi配信場所表示・非表示</a></li>
+                <li><a href="#" onclick="displayButton('taxi');return false;">タクシー乗り場表示・非表示</a></li>
+                <li><a href="#" onclick="displayButton('park');return false;">公園表示・非表示</a></li>
+                <li><a href="#" onclick="displayButton('aed');return false;">AED設置場所表示・非表示</a></li>
+                <li><a href="#" onclick="getLocation();return false;">地図再読み込み</a></li>
+            </ul>
+          <li><a href="#">災害情報</a></li>
+          <li><a href="#">アプリ情報</a></li>
         </ul>
     </nav>
 
-    
-    
     <!-- メインコンテンツ -->
     <div class="wrapper">
     <!-- 開閉用ボタン -->
-    <div class="side-menu-btn" id="js__sideMenuBtn"></div>
+    <div class="side-menu-btn" id="js__sideMenuBtn"><img src="./pic/setting.png" width="40" height="40" /></div>
     
     <div id="map_canvas"></div>
     
     <footer id="footer">
         <div class="nav-tabs-outer">
             <ul class="nav nav-tabs js-tabs">
-                <li class="active text-center"><button class="btn btn-primary" onclick="dispMarker()">aaa</button></li>
-                <li class="text-center"><button>aaa</button></li>
-                <li class="text-center"><button onclick="getLocation()">aaa</button></li>
-                <li class="text-center"><button>aaa</button></li>
-                <li class="text-center"><button>aaa</button></li>
-                <li class="text-center"><button>aaa</button></li>
+                <li class="active text-center"><button id="toilet" onclick="dispToiletMarker()"><img src="./pic/Toilet.png" alt="button" width="60" height="60" /></button></li>
+                <li class="text-center"><button id="wifi" onclick="dispWifiMarker()"><img src="./pic/WiFi.png" alt="button" width="60" height="60" /></button></li>
+                <li class="text-center"><button id="taxi" onclick="dispTaxiMarker()"><img src="./pic/TAXI.png" alt="button" width="60" height="60" /></button></li>
+                <li class="text-center"><button id="park" onclick="dispParkMarker()"><img src="./pic/PARK.png" alt="button" width="60" height="60" /></button></li>
+                <li class="text-center"><button id="aed" onclick="dispAEDMarker()"><img src="./pic/AED.png" alt="button" width="60" height="60" /></button></li>
             </ul>
         </div>
     </footer>
