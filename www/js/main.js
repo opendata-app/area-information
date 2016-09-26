@@ -11,8 +11,6 @@ var floodFlg = true;
 var refugeFlg = true;
 var marker;
 var currentInfoWindow = null;    //最後に開いた情報ウィンドウを記憶
-// google.maps.Geocoder()コンストラクタのインスタンスを生成
-var geocoder = new google.maps.Geocoder();
 
 // 各マーカーリストの作成
 $(function () {
@@ -391,6 +389,8 @@ $(function () {
 
 // マーカーを読み込む
 function readWifiMarker() {
+    // google.maps.Geocoder()コンストラクタのインスタンスを生成
+    var geocoder = new google.maps.Geocoder();
     // google.maps.MVCArray()コンストラクタのインスタンスを生成
     wifiMarkerList = new google.maps.MVCArray();
     // 情報アイコンを表示
