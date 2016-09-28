@@ -12,38 +12,40 @@ var refugeFlg = true;
 var marker;
 var currentInfoWindow = null;    //最後に開いた情報ウィンドウを記憶
 
+
 // 各マーカーリストの作成
 $(function () {
-    setTimeout(function () {
-        readTaxiMarker();
-    }, 0);
+    getLocation();
     setTimeout(function () {
         readWifiMarker();
-    }, 2000);
+    }, 0);
+    setTimeout(function () {
+        readTaxiMarker();
+    }, 3000);
     setTimeout(function () {
         readParkMarker();
-    }, 4000);
-    setTimeout(function () {
-        readToiletMarker();
     }, 6000);
     setTimeout(function () {
+        readToiletMarker();
+    }, 9000);
+    setTimeout(function () {
         readAEDMarker();
-    }, 8000);
-    setTimeout(function () {
-        readEarthquakeMarker();
-    }, 10000);
-    setTimeout(function () {
-        readLandslideMarker();
     }, 12000);
     setTimeout(function () {
+        readEarthquakeMarker();
+    }, 15000);
+    setTimeout(function () {
+        readLandslideMarker();
+    }, 18000);
+    setTimeout(function () {
         readFireMarker();
-    }, 14000);
+    }, 21000);
     setTimeout(function () {
         readFloodMarker();
-    }, 16000);
+    }, 24000);
     setTimeout(function () {
         readRefugeMarker();
-    }, 18000);
+    }, 27000);
 });
 
 // タブ表示・非表示状態情報の保持
@@ -80,7 +82,7 @@ function getTextFile (fname) {
 }
 
 // マップ表示
-var getLocation = function() {
+function getLocation() {
     // 座標情報の取得に成功したら発火する処理
     // 引数pには座標情報が入ります
     var success = function(p) {
@@ -122,9 +124,6 @@ var getLocation = function() {
     // 現在の座標を取得
     navigator.geolocation.getCurrentPosition(success, locFail);
 };
-        
-//  デバイスの準備ができたら
-document.addEventListener("deviceready", getLocation, true);
 
 // アイコン表示
 function dispAEDMarker() {
@@ -388,19 +387,18 @@ $(function () {
 });
 
 // マーカーを読み込む
-function readWifiMarker() {
+function readWifiMarker() {    
     // google.maps.Geocoder()コンストラクタのインスタンスを生成
-    var geocoder = new google.maps.Geocoder();
+    geocoder = new google.maps.Geocoder();
     // google.maps.MVCArray()コンストラクタのインスタンスを生成
     wifiMarkerList = new google.maps.MVCArray();
     // 情報アイコンを表示
-    var str = getTextFile("./data/wifi.txt");
-    var data = str.split("\n");
+    var wifiText = getTextFile("./data/wifi.txt");
+    var wifiData = wifiText.split("\n");
     var i = 0;
-    setTimeout(function a() {
-        console.log(data[i]);
-        if (!(i < data.length)) return;
-        geocoder.geocode({'address': data[i]}, function(results, status) {
+    setTimeout(function getMarker() {
+        if (!(i < wifiData.length)) return;
+        geocoder.geocode({'address': wifiData[i]}, function(results, status) {
             // ジオコーディングが成功した場合
             if (status == google.maps.GeocoderStatus.OK) {
                 // google.maps.Marker()コンストラクタにマーカーを設置するMapオブジェクトと
@@ -417,7 +415,7 @@ function readWifiMarker() {
             }
         });
     i ++;
-    setTimeout(a, 20000);
+    setTimeout(getMarker, 30000);
     });
 }
 
@@ -425,15 +423,14 @@ function readTaxiMarker() {
     // google.maps.MVCArray()コンストラクタのインスタンスを生成
     taxiMarkerList = new google.maps.MVCArray();
     // 情報アイコンを表示
-    var str = getTextFile("./data/taxi.txt");
-    var data = str.split("\n");
-    var str = getTextFile("./data/taxi_info.txt");
-    var infoData = str.split("\n");
+    var taxiText = getTextFile("./data/taxi.txt");
+    var taxiData = taxiText.split("\n");
+    var taxiInfoText = getTextFile("./data/taxi_info.txt");
+    var taxiInfoData = taxiInfoText.split("\n");
     var i = 0;
-    setTimeout(function a() {
-        console.log(data[i]);
-        if (!(i < data.length)) return;
-        geocoder.geocode({'address': data[i]}, function(results, status) {
+    setTimeout(function getMarker() {
+        if (!(i < taxiData.length)) return;
+        geocoder.geocode({'address': taxiData[i]}, function(results, status) {
             // ジオコーディングが成功した場合
             if (status == google.maps.GeocoderStatus.OK) {
                 // google.maps.Marker()コンストラクタにマーカーを設置するMapオブジェクトと
@@ -442,7 +439,7 @@ function readTaxiMarker() {
                     position: results[0].geometry.location, // マーカーを立てる位置を指定
                     icon:'./icon/TAXIMarker.png' // 情報ごとにマーカーイメージを変更
                 });
-                markerEvent(marker, infoData[i - 1]); // マーカーにクリックイベントを追加
+                markerEvent(marker, taxiInfoData[i - 1]); // マーカーにクリックイベントを追加
                 taxiMarkerList.push(marker);
             } else {
                 // ジオコーディングが成功しなかった場合
@@ -450,7 +447,7 @@ function readTaxiMarker() {
             }
         });
     i ++;
-    setTimeout(a, 20000);
+    setTimeout(getMarker, 30000);
     });
 }
 
@@ -458,13 +455,14 @@ function readParkMarker() {
     // google.maps.MVCArray()コンストラクタのインスタンスを生成
     parkMarkerList = new google.maps.MVCArray();
     // 情報アイコンを表示
-    var str = getTextFile("./data/park.txt");
-    var data = str.split("\n");
+    var parkText = getTextFile("./data/park.txt");
+    var parkData = parkText.split("\n");
+    var parkInfoText = getTextFile("./data/park_info.txt");
+    var parkInfoData = parkInfoText.split("\n");
     var i = 0;
-    setTimeout(function a() {
-        console.log(data[i]);
-        if (!(i < data.length)) return;
-        geocoder.geocode({'address': data[i]}, function(results, status) {
+    setTimeout(function getMarker() {
+        if (!(i < parkData.length)) return;
+        geocoder.geocode({'address': parkData[i]}, function(results, status) {
             // ジオコーディングが成功した場合
             if (status == google.maps.GeocoderStatus.OK) {
                 // google.maps.Marker()コンストラクタにマーカーを設置するMapオブジェクトと
@@ -473,7 +471,7 @@ function readParkMarker() {
                     position: results[0].geometry.location, // マーカーを立てる位置を指定
                     icon:'./icon/PARKMarker.png' // 情報ごとにマーカーイメージを変更
                 });
-                markerEvent(marker, results[0].formatted_address); // マーカーにクリックイベントを追加
+                markerEvent(marker, parkInfoData[i - 1]); // マーカーにクリックイベントを追加
                 parkMarkerList.push(marker);
             } else {
                 // ジオコーディングが成功しなかった場合
@@ -481,7 +479,7 @@ function readParkMarker() {
             }
         });
     i ++;
-    setTimeout(a, 20000);
+    setTimeout(getMarker, 30000);
     });
 }
 
@@ -489,13 +487,12 @@ function readToiletMarker() {
     // google.maps.MVCArray()コンストラクタのインスタンスを生成
     toiletMarkerList = new google.maps.MVCArray();
     // 情報アイコンを表示
-    var str = getTextFile("./data/toilet.txt");
-    var data = str.split("\n");
+    var toiletText = getTextFile("./data/toilet.txt");
+    var toiletData = toiletText.split("\n");
     var i = 0;
-    setTimeout(function a() {
-        console.log(data[i]);
-        if (!(i < data.length)) return;
-        geocoder.geocode({'address': data[i]}, function(results, status) {
+    setTimeout(function getMarker() {
+        if (!(i < toiletData.length)) return;
+        geocoder.geocode({'address': toiletData[i]}, function(results, status) {
             // ジオコーディングが成功した場合
             if (status == google.maps.GeocoderStatus.OK) {
                 // google.maps.Marker()コンストラクタにマーカーを設置するMapオブジェクトと
@@ -512,7 +509,7 @@ function readToiletMarker() {
             }
         });
     i ++;
-    setTimeout(a, 20000);
+    setTimeout(getMarker, 30000);
     });
 }
 
@@ -520,15 +517,14 @@ function readAEDMarker() {
     // google.maps.MVCArray()コンストラクタのインスタンスを生成
     AEDMarkerList = new google.maps.MVCArray();
     // 情報アイコンを表示
-    var str = getTextFile("./data/AED.txt");
-    var data = str.split("\n");
-    var str = getTextFile("./data/AED_info.txt");
-    var infoData = str.split("\n");
+    var AEDText = getTextFile("./data/AED.txt");
+    var AEDData = AEDText.split("\n");
+    var AEDInfoText = getTextFile("./data/AED_info.txt");
+    var AEDInfoData = AEDInfoText.split("\n");
     var i = 0;
-    setTimeout(function a() {
-        console.log(data[i]);
-        if (!(i < data.length)) return;
-        geocoder.geocode({'address': data[i]}, function(results, status) {
+    setTimeout(function getMarker() {
+        if (!(i < AEDData.length)) return;
+        geocoder.geocode({'address': AEDData[i]}, function(results, status) {
             // ジオコーディングが成功した場合
             if (status == google.maps.GeocoderStatus.OK) {
                 // google.maps.Marker()コンストラクタにマーカーを設置するMapオブジェクトと
@@ -537,7 +533,7 @@ function readAEDMarker() {
                     position: results[0].geometry.location, // マーカーを立てる位置を指定
                     icon:'./icon/AEDMarker.png' // 情報ごとにマーカーイメージを変更
                 });
-                markerEvent(marker, infoData[i - 1]); // マーカーにクリックイベントを追加
+                markerEvent(marker, AEDInfoData[i - 1]); // マーカーにクリックイベントを追加
                 AEDMarkerList.push(marker);
             } else {
                 // ジオコーディングが成功しなかった場合
@@ -545,7 +541,7 @@ function readAEDMarker() {
             }
         });
     i ++;
-    setTimeout(a, 20000);
+    setTimeout(getMarker, 30000);
     });
 }
 
@@ -553,13 +549,12 @@ function readEarthquakeMarker() {
     // google.maps.MVCArray()コンストラクタのインスタンスを生成
     earthquakeMarkerList = new google.maps.MVCArray();
     // 情報アイコンを表示
-    var str = getTextFile("./data/earthquake.txt");
-    var data = str.split("\n");
+    var earthquakeText = getTextFile("./data/earthquake.txt");
+    var earthquakeData = earthquakeText.split("\n");
     var i = 0;
-    setTimeout(function a() {
-        console.log(data[i]);
-        if (!(i < data.length)) return;
-        geocoder.geocode({'address': data[i]}, function(results, status) {
+    setTimeout(function getMarker() {
+        if (!(i < earthquakeData.length)) return;
+        geocoder.geocode({'address': earthquakeData[i]}, function(results, status) {
             // ジオコーディングが成功した場合
             if (status == google.maps.GeocoderStatus.OK) {
                 // google.maps.Marker()コンストラクタにマーカーを設置するMapオブジェクトと
@@ -576,7 +571,7 @@ function readEarthquakeMarker() {
             }
         });
     i ++;
-    setTimeout(a, 20000);
+    setTimeout(getMarker, 30000);
     });
 }
 
@@ -584,13 +579,12 @@ function readLandslideMarker() {
     // google.maps.MVCArray()コンストラクタのインスタンスを生成
     landslideMarkerList = new google.maps.MVCArray();
     // 情報アイコンを表示
-    var str = getTextFile("./data/landslide.txt");
-    var data = str.split("\n");
+    var landslideText = getTextFile("./data/landslide.txt");
+    var landslideData = landslideText.split("\n");
     var i = 0;
-    setTimeout(function a() {
-        console.log(data[i]);
-        if (!(i < data.length)) return;
-        geocoder.geocode({'address': data[i]}, function(results, status) {
+    setTimeout(function getMarker() {
+        if (!(i < landslideData.length)) return;
+        geocoder.geocode({'address': landslideData[i]}, function(results, status) {
             // ジオコーディングが成功した場合
             if (status == google.maps.GeocoderStatus.OK) {
                 // google.maps.Marker()コンストラクタにマーカーを設置するMapオブジェクトと
@@ -607,7 +601,7 @@ function readLandslideMarker() {
             }
         });
     i ++;
-    setTimeout(a, 20000);
+    setTimeout(getMarker, 30000);
     });
 }
 
@@ -615,13 +609,12 @@ function readFireMarker() {
     // google.maps.MVCArray()コンストラクタのインスタンスを生成
     fireMarkerList = new google.maps.MVCArray();
     // 情報アイコンを表示
-    var str = getTextFile("./data/fire.txt");
-    var data = str.split("\n");
+    var fireText = getTextFile("./data/fire.txt");
+    var fireData = fireText.split("\n");
     var i = 0;
-    setTimeout(function a() {
-        console.log(data[i]);
-        if (!(i < data.length)) return;
-        geocoder.geocode({'address': data[i]}, function(results, status) {
+    setTimeout(function getMarker() {
+        if (!(i < fireData.length)) return;
+        geocoder.geocode({'address': fireData[i]}, function(results, status) {
             // ジオコーディングが成功した場合
             if (status == google.maps.GeocoderStatus.OK) {
                 // google.maps.Marker()コンストラクタにマーカーを設置するMapオブジェクトと
@@ -638,7 +631,7 @@ function readFireMarker() {
             }
         });
     i ++;
-    setTimeout(a, 20000);
+    setTimeout(getMarker, 30000);
     });
 }
 
@@ -646,13 +639,12 @@ function readFloodMarker() {
     // google.maps.MVCArray()コンストラクタのインスタンスを生成
     floodMarkerList = new google.maps.MVCArray();
     // 情報アイコンを表示
-    var str = getTextFile("./data/flood.txt");
-    var data = str.split("\n");
+    var floodText = getTextFile("./data/flood.txt");
+    var floodData = floodText.split("\n");
     var i = 0;
-    setTimeout(function a() {
-        console.log(data[i]);
-        if (!(i < data.length)) return;
-        geocoder.geocode({'address': data[i]}, function(results, status) {
+    setTimeout(function getMarker() {
+        if (!(i < floodData.length)) return;
+        geocoder.geocode({'address': floodData[i]}, function(results, status) {
             // ジオコーディングが成功した場合
             if (status == google.maps.GeocoderStatus.OK) {
                 // google.maps.Marker()コンストラクタにマーカーを設置するMapオブジェクトと
@@ -669,7 +661,7 @@ function readFloodMarker() {
             }
         });
     i ++;
-    setTimeout(a, 20000);
+    setTimeout(getMarker, 30000);
     });
 }
 
@@ -677,13 +669,12 @@ function readRefugeMarker() {
     // google.maps.MVCArray()コンストラクタのインスタンスを生成
     refugeMarkerList = new google.maps.MVCArray();
     // 情報アイコンを表示
-    var str = getTextFile("./data/refuge.txt");
-    var data = str.split("\n");
+    var refugeText = getTextFile("./data/refuge.txt");
+    var refugeData = refugeText.split("\n");
     var i = 0;
-    setTimeout(function a() {
-        console.log(data[i]);
-        if (!(i < data.length)) return;
-        geocoder.geocode({'address': data[i]}, function(results, status) {
+    setTimeout(function getMarker() {
+        if (!(i < refugeData.length)) return;
+        geocoder.geocode({'address': refugeData[i]}, function(results, status) {
             // ジオコーディングが成功した場合
             if (status == google.maps.GeocoderStatus.OK) {
                 // google.maps.Marker()コンストラクタにマーカーを設置するMapオブジェクトと
@@ -700,6 +691,6 @@ function readRefugeMarker() {
             }
         });
     i ++;
-    setTimeout(a, 20000);
+    setTimeout(getMarker, 30000);
     });
 }

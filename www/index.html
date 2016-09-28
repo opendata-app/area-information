@@ -4,12 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta http-equiv="Content-Security-Policy" content="default-src * data:; style-src * 'unsafe-inline'; script-src * 'unsafe-inline' 'unsafe-eval'">
-    <script src="components/loader.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9BxS4zOTKnJK7AnnrTD22y5Y-K1X4_tE" async defer></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/bootstrap.js"></script>
     <script type="text/javascript" src="js/hammer.js"></script>
     <script type="text/javascript" src="js/jquery.hammer.js"></script>
+    <script type="text/javascript" src="components/loader.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
 
     <link rel="stylesheet" href="components/loader.css">
@@ -31,7 +31,7 @@
                 <li><a class="side-menu-list" style="display: none;" href="#" onclick="displayButton('park');return false;">公園 <span id="park_switch">ON</span></a></li>
                 <li><a class="side-menu-list" style="display: none;" href="#" onclick="displayButton('aed');return false;">AED設置場所 <span id="aed_switch">ON</span></a></li>
             </ul>
-            <li id="disasterInformationMenu"><a href="#">災害情報表示</a></li>
+            <li id="disasterInformationMenu"><a href="#">災害時避難場所表示</a></li>
             <ul class="nav" id="disasterInformationBoxes">
                 <li><a class="side-menu-list" style="display: none;" href="#" onclick="dispEarthquakeMarker();return false;">地震避難場所 <span id="earthquake_switch">OFF</span></a></li>
                 <li><a class="side-menu-list" style="display: none;" href="#" onclick="dispFireMarker();return false;">火事避難場所 <span id="fire_switch">OFF</span></a></li>
